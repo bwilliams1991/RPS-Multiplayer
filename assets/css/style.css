@@ -1,0 +1,26 @@
+.helper-outline {
+	border: 1px solid red;
+}
+
+.player-one {
+	height: 290px;
+}
+.player-two {
+	height: 290px;
+}
+.player-win {
+	height: 290px;
+}
+
+.messenger-div {
+	margin-top: 50px;
+}
+
+.messenger {
+	margin-bottom: 20px;
+}
+
+.messenger-input {
+	width: 685px !important;
+}
+
