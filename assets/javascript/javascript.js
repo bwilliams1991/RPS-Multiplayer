@@ -47,6 +47,8 @@ $(document).ready(function () {
 	var p2losses = 0;
 	var p2choice = "";
 	var activeConnections = 0;
+	var choices = ["Rock", "Paper", "Scissors"];
+
 
 	// var turn = '';
 	// var resultsin = '';
@@ -83,40 +85,53 @@ $(document).ready(function () {
 			activeConnections = snapshot.numChildren();
 			console.log('Number of players ONLINE: ' + activeConnections);
 
-				name = $username.val();
-				if (name != '') {
-					console.log(name);
-					if (activeConnections == 1) {
+			if ($username.val() != '') {
 
-						$p1Area.html(name);
+				if (activeConnections == 1) {
+					p1name = $username.val();
+					database.ref().child("/p1").set({
+						name: p1name,
+						wins: p1wins,
+						losses: p1losses,
+						choice: p1choice
+					});
+					// console.log(database.ref().child("/p1"));
+					// 	$p1Area.html(p1name);
+					// $p2Area.html(p2name);
+					showName();
+					showButtons();
 
-						database.ref().child("/p1").set({
-							name: name,
-							wins: p1wins,
-							losses: p1losses,
-							choice: p1choice
-						});
-					} else if (activeConnections == 2) {
+				} else if (activeConnections == 2) {
+					p2name = $username.val();
+					database.ref().child("/p2").set({
+						name: p2name,
+						wins: p2wins,
+						losses: p2losses,
+						choice: p2choice
+					});
+					// 	$p1Area.html(p1name);
+					// $p2Area.html(p2name);
+					showName();
+					showButtons();
 
-						$p2Area.html(name); //name of opponent update from firebase
-
-						database.ref().child("/p2").set({
-							name: name,
-							wins: p2wins,
-							losses: p2losses,
-							choice: p2choice
-						});
-					} else {
-						console.log("The game is full, please try again later...");
-						// connectionsRef.remove(); how do i kick
-					}
+				} else {
+					console.log("The game is full, please try again later...");
+					// connectionsRef.remove(); how do i kick
 				}
+				// $p1Area.html(p1name);
+				// $p2Area.html(p2name); //name of opponent update from firebase
+			}
 		})
 	};
 
- // Event Binders
- $submitName.on('click', playername);
-//  $sendBtn.on('click', chat);
+	// Event Binders
+	$submitName.on('click', playername);
+	// $submitName.on('click', playername, function(){
+	// 	$("#submit-form").remove();
+	// });
+
+
+	//  $sendBtn.on('click', chat);
 
 	// database.ref().on("value", function(snapshot) {
 	// 	console.log(snapshot.val());
@@ -125,49 +140,59 @@ $(document).ready(function () {
 	// 	console.log("The read failed: " + errorObject.code);
 	// });
 
+	function showName() {
+		console.log("hey ya!");
+		$p1Area.html(p1name);
+		$p2Area.html(p2name);
+	};
+
+	function showButtons() {
+		$("#choicesBtn").removeClass("hidden")
+	};
+
+	function chat() {
+
+	};
 
 
 
 
+	
 
 
-
-	// https://github.com/jpdevspace/Firebase-Multiplayer-Game
-	// https://console.firebase.google.com/project/rpsgame-d1d4e/database/rpsgame-d1d4e/data/players/-L6tVaYYkzmC1lU1GOKf
-
-	var game = {
-		// Creates an array that lists out all of the options (Rock, Paper, or Scissors).
-		choices: ["Rock", "Paper", "Scissors"],
+	// var game = {
+	// 	// Creates an array that lists out all of the options (Rock, Paper, or Scissors).
+	// 	choices: ["Rock", "Paper", "Scissors"],
 
 
-		createRPS: function () {
+	// 	createRPS: function () {
 
-		},
+	// 	},
 
-		updateStats: function () {
+	// 	updateStats: function () {
 
-		},
+	// 	},
 
-		selection: function (e) {
-			// if ($(e.target).data("name") == 1) {
-			// 	game.win();
-			// } else {
-			// 	game.lose();
-			// };
-		},
+	// 	selection: function (e) {
+	// 		// if ($(e.target).data("name") == 1) {
+	// 		// 	game.win();
+	// 		// } else {
+	// 		// 	game.lose();
+	// 		// };
+	// 	},
 
-		win: function () {
-			console.log('win');
-		},
+	// 	win: function () {
+	// 		console.log('win');
+	// 	},
 
-		lose: function () {
-			console.log('lose');
-		},
-		playeractive: function () {
+	// 	lose: function () {
+	// 		console.log('lose');
+	// 	},
+	// 	playeractive: function () {
 
-		},
+	// 	},
 
-	}
+	// }
 
 
 
@@ -181,11 +206,10 @@ $(document).ready(function () {
 
 	// logic decides winner; winner displayed in center div #player-win
 
-	// get im working
+	// get chat working
 
 
-	// player 1 inputs name /
-	// waiting for player 2
+	// player 1 inputs name /// waiting for player 2
 	// player 2 inputs name
 	// firebase save names
 	// alert player 2 name to player 1 firebase call names
@@ -209,48 +233,52 @@ $(document).ready(function () {
 	// --------------------------------------------------------------------------------------
 	// 
 
+// replace on keyup with something like:-----
+	// $(document).on("click", '.answer-button', function (event) {
+	// 	theWholeGame.clickedOn(event);
+	// });
 
+	// where the event would attach to the value of the choice buttons (Rock, Paper, Scissors)
+// ---------
 
-	// This function is run whenever the user presses a key.
-	// document.onkeyup = function (event) {
-
+	
 	// 	// Determines which key was pressed.
-	// 	var userGuess = event.key;
+	// 	var userChoise = event.val;
 
-	// 	// Randomly chooses a choice from the options array. This is the Computer's guess.
-	// 	var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
-
-	// 	// Reworked our code from last step to use "else if" instead of lots of if statements.
 
 	// 	// This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
-	// 	if ((userGuess === "Rock") || (userGuess === "Paper") || (userGuess === "Scissors")) {
+	// 	if ((userChoise === "Rock") || (userChoise === "Paper") || (userChoise === "Scissors")) {
 
-	// 		if ((userGuess === "Rock") && (computerGuess === "Scissors")) {
+	// 		if ((userChoise === "Rock") && (computerGuess === "Scissors")) {
 	// 			wins++;
-	// 		} else if ((userGuess === "Rock") && (computerGuess === "Paper")) {
+	// 		} else if ((userChoise === "Rock") && (computerGuess === "Paper")) {
 	// 			losses++;
-	// 		} else if ((userGuess === "Scissors") && (computerGuess === "Rock")) {
+	// 		} else if ((userChoise === "Scissors") && (computerGuess === "Rock")) {
 	// 			losses++;
-	// 		} else if ((userGuess === "Scissors") && (computerGuess === "Paper")) {
+	// 		} else if ((userChoise === "Scissors") && (computerGuess === "Paper")) {
 	// 			wins++;
-	// 		} else if ((userGuess === "Paper") && (computerGuess === "Rock")) {
+	// 		} else if ((userChoise === "Paper") && (computerGuess === "Rock")) {
 	// 			wins++;
-	// 		} else if ((userGuess === "Paper") && (computerGuess === "Scissors")) {
+	// 		} else if ((userChoise === "Paper") && (computerGuess === "Scissors")) {
 	// 			losses++;
-	// 		} else if (userGuess === computerGuess) {
+	// 		} else if (userChoise === computerGuess) {
 	// 			ties++;
 	// 		}
 
 	// 		// Creating a variable to hold our new HTML. Our HTML now keeps track of the user and computer guesses, and wins/losses/ties.
 	// 		var html =
-	// 			"<p>You chose: " + userGuess + "</p>" +
-	// 			"<p>The computer chose: " + computerGuess + "</p>" +
+	// 			"<p>You chose: " + userChoise + "</p>" +
+				// "<p>Your opponent chose: " + ?userChoise + "</p>" +
 	// 			"<p>wins: " + wins + "</p>" +
-	// 			"<p>losses: " + losses + "</p>" +
-	// 			"<p>ties: " + ties + "</p>";
+	// 			"<p>losses: " + losses + "</p>";
 
-	// 		// Set the inner HTML contents of the #game div to our html string
-	// 		document.querySelector("#game").innerHTML = html;
+
+
 	// 	}
 	// };
 });
+
+
+
+// Link to firebase db.
+	// https://console.firebase.google.com/project/rpsgame-d1d4e/database/rpsgame-d1d4e/data/players/-L6tVaYYkzmC1lU1GOKf
